@@ -1,0 +1,109 @@
+<idea-plugin>
+    <id>com.kxaca.dartdatatoolkit</id>
+    <name>Dart Data Toolkit</name>
+    <vendor email="moisesmartins2584@gmail.com" url="https://github.com/moisesmartins-dev">KXACA</vendor>
+    <description><![CDATA[
+        Automatically generates essential methods for Dart classes directly from the editor.<br/><br/>
+
+        <b>Features:</b>
+        <ul>
+            <li><b>copyWith()</b> — creates modified copies of the class</li>
+            <li><b>toJson()</b> — serializes the class to a JSON map</li>
+            <li><b>fromJson()</b> — deserializes a class from a JSON map</li>
+            <li><b>toString()</b> — formatted multiline string representation</li>
+            <li><b>Dart Class from JSON</b> — generates a complete Dart class from a pasted JSON object</li>
+            <li><b>Barrel File</b> — exports selected Dart files from a folder into a single index file</li>
+        </ul>
+
+        <b>Shortcuts:</b>
+        <ul>
+            <li><code>Alt+Insert</code> — individual method actions inside the Generate menu</li>
+            <li><code>Ctrl+Alt+D</code> — generate multiple methods at once</li>
+            <li><code>Ctrl+Alt+J</code> — generate Dart class from JSON</li>
+            <li><code>Ctrl+Alt+B</code> — generate barrel file</li>
+        </ul>
+
+        Supports nullable types (<code>String?</code>, <code>int?</code>, etc.) and generic types (<code>List&lt;T&gt;</code>, <code>Map&lt;K, V&gt;</code>).
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <b>1.0.0</b>
+        <ul>
+            <li>Initial release</li>
+            <li>copyWith(), toJson(), fromJson(), toString() generators</li>
+            <li>Dart class generation from JSON with auto-formatting</li>
+            <li>Barrel file generator with checkbox UI and recursive mode</li>
+            <li>Individual method actions in the Generate menu (Alt+Insert)</li>
+            <li>Nullable and generic type support</li>
+        </ul>
+    ]]></change-notes>
+
+    <idea-version since-build="233" until-build="261.*"/>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+        <action
+            id="Dart.GenerateCopyWith"
+            class="com.kxaca.dartdatatoolkit.actions.GenerateCopyWithAction"
+            text="copyWith()"
+            description="Generates copyWith() method for the Dart class at the cursor">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+
+        <action
+            id="Dart.GenerateToJson"
+            class="com.kxaca.dartdatatoolkit.actions.GenerateToJsonAction"
+            text="toJson()"
+            description="Generates toJson() method for the Dart class at the cursor">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+
+        <action
+            id="Dart.GenerateFromJson"
+            class="com.kxaca.dartdatatoolkit.actions.GenerateFromJsonAction"
+            text="fromJson()"
+            description="Generates fromJson() factory constructor for the Dart class at the cursor">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+
+        <action
+            id="Dart.GenerateToString"
+            class="com.kxaca.dartdatatoolkit.actions.GenerateToStringAction"
+            text="toString()"
+            description="Generates toString() method for the Dart class at the cursor">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+
+        <action
+            id="DartDataClassAction"
+            class="com.kxaca.dartdatatoolkit.actions.GenerateDataClassAction"
+            text="Dart Data Methods..."
+            description="Generates copyWith, toJson, fromJson, toString methods for the Dart class at the cursor">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt d"/>
+        </action>
+
+        <action
+            id="Dart.JsonToDartClass"
+            class="com.kxaca.dartdatatoolkit.actions.JsonToDartAction"
+            text="Dart Class from JSON..."
+            description="Generates a complete Dart class from a JSON object">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt j"/>
+        </action>
+
+        <action
+            id="DartBarrelFileAction"
+            class="com.kxaca.dartdatatoolkit.actions.GenerateBarrelFileAction"
+            text="Dart Barrel File..."
+            description="Generates a barrel file to export multiple Dart files from a folder">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt b"/>
+        </action>
+    </actions>
+</idea-plugin>

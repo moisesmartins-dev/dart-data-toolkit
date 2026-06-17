@@ -1,0 +1,52 @@
+# Gradle
+.gradle/
+
+# IntelliJ Platform plugin cache
+.intellijPlatform/
+build/
+out/
+*.zip
+*.tar.gz
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*.sublime-*
+.vscode/
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# IDE specific files
+*.class
+*.log
+
+# Local environment
+local.properties
+*.local
+
+# Gradle wrapper
+!gradle-wrapper.jar
+
+# Project specific
+dist/
+target/
+docs/_site/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+.claude/
+

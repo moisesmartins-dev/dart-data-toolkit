@@ -1,0 +1,264 @@
+# Usage Guide
+
+Detailed examples and advanced usage for every feature in Dart Data Class Generator.
+
+## Table of Contents
+
+- [Generate Dart Methods](#generate-dart-methods)
+  - [copyWith()](#copywith)
+  - [toJson()](#tojson)
+  - [fromJson()](#fromjson)
+  - [toString()](#tostring)
+- [Generate Class from JSON](#generate-class-from-json)
+- [Generate Barrel File](#generate-barrel-file)
+
+---
+
+## Generate Dart Methods
+
+Place the cursor anywhere inside a Dart class and press `Ctrl+Alt+D` (or `Alt+Insert` for individual methods).
+
+The plugin parses the class at the cursor and generates only the methods you select.
+
+### copyWith()
+
+Creates a new instance of the class with some fields replaced.
+
+**Input:**
+```dart
+class User {
+  final String name;
+  final String email;
+  final int? age;
+
+  User({required this.name, required this.email, this.age});
+}
+```
+
+**Generated:**
+```dart
+User copyWith({
+  String? name,
+  String? email,
+  int? age,
+}) {
+  return User(
+    name: name ?? this.name,
+    email: email ?? this.email,
+    age: age ?? this.age,
+  );
+}
+```
+
+**Usage in Dart:**
+```dart
+final user = User(name: 'Alice', email: 'alice@example.com', age: 30);
+final updated = user.copyWith(name: 'Bob');
+// updated.name == 'Bob', updated.email == 'alice@example.com'
+```
+
+> All parameters are made nullable so you only need to pass the fields you want to change.
+
+---
+
+### toJson()
+
+Serializes the class to a `Map<String, dynamic>`.
+
+**Generated:**
+```dart
+Map<String, dynamic> toJson() {
+  return {
+    'name': name,
+    'email': email,
+    'age': age,
+  };
+}
+```
+
+**Usage in Dart:**
+```dart
+final json = user.toJson();
+// {'name': 'Alice', 'email': 'alice@example.com', 'age': 30}
+
+// Convert to JSON string:
+import 'dart:convert';
+final jsonString = jsonEncode(user.toJson());
+```
+
+---
+
+### fromJson()
+
+Generates a factory constructor that creates an instance from a `Map<String, dynamic>`.
+
+**Generated:**
+```dart
+factory User.fromJson(Map<String, dynamic> json) {
+  return User(
+    name: json['name'],
+    email: json['email'],
+    age: json['age'],
+  );
+}
+```
+
+**Usage in Dart:**
+```dart
+import 'dart:convert';
+
+final jsonString = '{"name":"Alice","email":"alice@example.com","age":30}';
+final user = User.fromJson(jsonDecode(jsonString));
+```
+
+---
+
+### toString()
+
+Generates a multiline `toString()` override for readable debug output.
+
+**Generated:**
+```dart
+@override
+String toString() {
+  return '''
+    User(
+    name: $name,
+    email: $email,
+    age: $age,
+    )
+  ''';
+}
+```
+
+**Usage in Dart:**
+```dart
+print(user);
+// User(
+// name: Alice,
+// email: alice@example.com,
+// age: 30,
+// )
+```
+
+---
+
+## Generate Class from JSON
+
+Press `Ctrl+Alt+J` anywhere in a Dart file to open the dialog.
+
+### Steps
+
+1. Enter a **class name** (e.g. `Product`)
+2. Select which **methods** to include
+3. Paste your JSON — it is auto-formatted on paste
+4. Click **OK**
+
+### Type inference
+
+| JSON value | Dart type |
+|---|---|
+| `"hello"` | `String` |
+| `42` | `int` |
+| `9.99` | `double` |
+| `true` / `false` | `bool` |
+| `null` | `dynamic` |
+| `[...]` | `List<T>` (inferred from first element) |
+| `{...}` | `Map<String, dynamic>` |
+
+### Key conversion
+
+Snake\_case and kebab-case keys are automatically converted to camelCase:
+
+| JSON key | Dart field |
+|---|---|
+| `first_name` | `firstName` |
+| `created-at` | `createdAt` |
+| `userId` | `userId` |
+
+### Example
+
+**JSON input:**
+```json
+{
+  "id": 1,
+  "product_name": "Widget",
+  "price": 9.99,
+  "in_stock": true,
+  "tags": ["sale", "new"]
+}
+```
+
+**Generated class:**
+```dart
+class Product {
+  final int id;
+  final String productName;
+  final double price;
+  final bool inStock;
+  final List<String> tags;
+
+  Product({
+    required this.id,
+    required this.productName,
+    required this.price,
+    required this.inStock,
+    required this.tags,
+  });
+
+  // Selected methods generated here...
+}
+```
+
+---
+
+## Generate Barrel File
+
+Right-click a folder in the Project panel and press `Ctrl+Alt+B`.
+
+### What is a barrel file?
+
+A barrel file (also called an index file) re-exports multiple Dart files from a single entry point:
+
+```dart
+// models/models.dart
+export 'user.dart';
+export 'product.dart';
+export 'order.dart';
+```
+
+This lets consumers import everything from one place:
+
+```dart
+import 'package:myapp/models/models.dart';
+```
+
+### Options
+
+| Option | Description |
+|---|---|
+| **File name** | Name of the output file (defaults to `foldername.dart`) |
+| **Include subdirectories** | Recursively includes Dart files from subfolders |
+| **Checkboxes** | Select exactly which files to export |
+| **Select all / Deselect all** | Toggle all checkboxes at once |
+
+### Example structure
+
+```
+lib/models/
+├── user.dart
+├── product.dart
+├── order.dart
+└── models.dart   ← generated barrel file
+```
+
+**Generated `models.dart`:**
+```dart
+/// This file is a barrel file. It exports all public APIs from this package.
+/// Generated by Dart Data Class Generator
+export 'order.dart';
+export 'product.dart';
+export 'user.dart';
+```
+
+> Files are always sorted alphabetically. Common index files (`index.dart`, `barrel.dart`) and special directories (`build/`, `.dart_tool/`) are excluded automatically.
