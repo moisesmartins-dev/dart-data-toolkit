@@ -195,7 +195,7 @@ All dialogs extend IntelliJ's `DialogWrapper`. They collect user input and expos
 
 ## Data Flow
 
-### Method generation (`Ctrl+Alt+D`)
+### Method generation (`Ctrl+Alt+D` / `Cmd+Alt+D`)
 
 ```
 User triggers action
@@ -209,7 +209,7 @@ User triggers action
     → WriteCommandAction → document.insertString(endOffset, code)
 ```
 
-### JSON to Dart class (`Ctrl+Alt+J`)
+### JSON to Dart class (`Ctrl+Alt+J` / `Cmd+Alt+J`)
 
 ```
 User triggers action
@@ -225,7 +225,7 @@ User triggers action
     → WriteCommandAction → document.insertString(cursorOffset, code)
 ```
 
-### Barrel file (`Ctrl+Alt+B`)
+### Barrel file (`Ctrl+Alt+B` / `Cmd+Alt+B`)
 
 ```
 User triggers action

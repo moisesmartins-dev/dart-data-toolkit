@@ -19,7 +19,7 @@ Um plugin poderoso para **Android Studio** e **IntelliJ IDEA** que gera automati
 - **toString()** — representação em string formatada com multiline
 - Suporte a tipos anuláveis (`String?`, `int?`, etc.)
 - Dialog interativo para escolher métodos individualmente
-- Atalho: `Ctrl+Alt+D`
+- Atalho: `Ctrl+Alt+D` (Windows/Linux) / `Cmd+Alt+D` (macOS)
 
 ### JSON para Classe Dart
 - Cole qualquer objeto JSON e gere uma classe Dart completa
@@ -27,23 +27,25 @@ Um plugin poderoso para **Android Studio** e **IntelliJ IDEA** que gera automati
 - `toJson()` e `fromJson()` tratam classes aninhadas automaticamente
 - Escolha quais métodos incluir
 - Formatação automática do JSON ao colar
-- Atalho: `Ctrl+Alt+J`
+- Atalho: `Ctrl+Alt+J` (Windows/Linux) / `Cmd+Alt+J` (macOS)
 
 ### Gerador de Barrel File
 - Exporta automaticamente todos os arquivos Dart de uma pasta
 - Lista de arquivos com checkboxes — escolha exatamente o que incluir
 - Modo recursivo opcional para subdiretórios
-- Atalho: `Ctrl+Alt+B`
+- Atalho: `Ctrl+Alt+B` (Windows/Linux) / `Cmd+Alt+B` (macOS)
 
 ## Instalação
 
 1. Compile o plugin: `./gradlew buildPlugin`
 2. No Android Studio / IntelliJ IDEA: **File → Settings → Plugins**
 3. Clique no ícone de engrenagem → **Install Plugin from Disk**
-4. Selecione `build/distributions/dart-data-plugin-1.0.0.zip`
+4. Selecione `build/distributions/dart-data-toolkit-1.0.0.zip`
 5. Reinicie a IDE
 
 ## Como usar
+
+> Para exemplos detalhados e uso avançado, consulte o [Guia de Uso](docs/usage-guide.md).
 
 ### Gerar métodos Dart
 
@@ -62,13 +64,13 @@ class User {
 ```
 
 1. Coloque o cursor dentro da classe
-2. Pressione `Ctrl+Alt+D` (ou clique direito → **Dart Data Methods...**)
+2. Pressione `Ctrl+Alt+D` / `Cmd+Alt+D` (ou clique direito → **Dart Data Methods...**)
 3. Selecione os métodos desejados
 4. O código é inserido automaticamente
 
 ### Gerar classe a partir de JSON
 
-1. Pressione `Ctrl+Alt+J` em qualquer arquivo Dart
+1. Pressione `Ctrl+Alt+J` / `Cmd+Alt+J` em qualquer arquivo Dart
 2. Digite o nome da classe (ex: `User`)
 3. Cole o JSON (formatado automaticamente)
 4. Selecione quais métodos incluir
@@ -157,7 +159,7 @@ Duas classes são geradas: `Address` e `User`. `User.toJson()` chama `address.to
 ### Gerar barrel file
 
 1. Clique direito em uma pasta no painel de projeto
-2. Pressione `Ctrl+Alt+B` (ou **Dart Barrel File...**)
+2. Pressione `Ctrl+Alt+B` / `Cmd+Alt+B` (ou **Dart Barrel File...**)
 3. Escolha os arquivos, habilite recursivo se necessário
 4. Clique em OK — `pasta.dart` é criado
 
@@ -178,7 +180,7 @@ class User {
 }
 ```
 
-### Depois (`Ctrl+Alt+D` com todos os métodos selecionados)
+### Depois (`Ctrl+Alt+D` / `Cmd+Alt+D` com todos os métodos selecionados)
 ```dart
 class User {
   final String name;

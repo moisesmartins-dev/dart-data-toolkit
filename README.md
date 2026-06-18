@@ -19,7 +19,7 @@ A powerful plugin for **Android Studio** and **IntelliJ IDEA** that automaticall
 - **toString()** — formatted multiline string representation
 - Supports nullable types (`String?`, `int?`, etc.)
 - Interactive dialog to choose individual methods
-- Keyboard shortcut: `Ctrl+Alt+D`
+- Keyboard shortcut: `Ctrl+Alt+D` (Windows/Linux) / `Cmd+Alt+D` (macOS)
 
 ### JSON to Dart Class
 - Paste any JSON object and generate a complete Dart class
@@ -27,23 +27,25 @@ A powerful plugin for **Android Studio** and **IntelliJ IDEA** that automaticall
 - `toJson()` and `fromJson()` handle nested classes automatically
 - Choose which methods to include
 - Auto-formats JSON on paste
-- Keyboard shortcut: `Ctrl+Alt+J`
+- Keyboard shortcut: `Ctrl+Alt+J` (Windows/Linux) / `Cmd+Alt+J` (macOS)
 
 ### Barrel File Generator
 - Automatically exports all Dart files from a folder
 - File list with checkboxes — choose exactly what to include
 - Optional recursive mode for subdirectories
-- Keyboard shortcut: `Ctrl+Alt+B`
+- Keyboard shortcut: `Ctrl+Alt+B` (Windows/Linux) / `Cmd+Alt+B` (macOS)
 
 ## Installation
 
 1. Build the plugin: `./gradlew buildPlugin`
 2. In Android Studio / IntelliJ IDEA: **File → Settings → Plugins**
 3. Click the gear icon → **Install Plugin from Disk**
-4. Select `build/distributions/dart-data-plugin-1.0.0.zip`
+4. Select `build/distributions/dart-data-toolkit-1.0.0.zip`
 5. Restart the IDE
 
 ## Usage
+
+> For detailed examples and advanced usage, see the [Usage Guide](docs/usage-guide.md).
 
 ### Generate Dart methods
 
@@ -62,13 +64,13 @@ class User {
 ```
 
 1. Place the cursor inside the class
-2. Press `Ctrl+Alt+D` (or right-click → **Dart Data Methods...**)
+2. Press `Ctrl+Alt+D` / `Cmd+Alt+D` (or right-click → **Dart Data Methods...**)
 3. Select the methods you want
 4. Code is inserted automatically
 
 ### Generate class from JSON
 
-1. Press `Ctrl+Alt+J` anywhere in a Dart file
+1. Press `Ctrl+Alt+J` / `Cmd+Alt+J` anywhere in a Dart file
 2. Enter a class name (e.g. `User`)
 3. Paste your JSON (auto-formatted)
 4. Select which methods to include
@@ -156,7 +158,7 @@ Two classes are generated: `Address` and `User`. `User.toJson()` calls `address.
 ### Generate barrel file
 
 1. Right-click on a folder in the Project panel
-2. Press `Ctrl+Alt+B` (or **Dart Barrel File...**)
+2. Press `Ctrl+Alt+B` / `Cmd+Alt+B` (or **Dart Barrel File...**)
 3. Choose files, enable recursive if needed
 4. Click OK — `folder.dart` is created
 
@@ -177,7 +179,7 @@ class User {
 }
 ```
 
-### After (`Ctrl+Alt+D` with all methods selected)
+### After (`Ctrl+Alt+D` / `Cmd+Alt+D` with all methods selected)
 ```dart
 class User {
   final String name;

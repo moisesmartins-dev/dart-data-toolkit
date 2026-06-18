@@ -16,7 +16,7 @@ Detailed examples and advanced usage for every feature in Dart Data Class Genera
 
 ## Generate Dart Methods
 
-Place the cursor anywhere inside a Dart class and press `Ctrl+Alt+D` (or `Alt+Insert` for individual methods).
+Place the cursor anywhere inside a Dart class and press `Ctrl+Alt+D` / `Cmd+Alt+D` (or `Alt+Insert` for individual methods).
 
 The plugin parses the class at the cursor and generates only the methods you select.
 
@@ -145,7 +145,7 @@ print(user);
 
 ## Generate Class from JSON
 
-Press `Ctrl+Alt+J` anywhere in a Dart file to open the dialog.
+Press `Ctrl+Alt+J` / `Cmd+Alt+J` anywhere in a Dart file to open the dialog.
 
 ### Steps
 
@@ -214,7 +214,7 @@ class Product {
 
 ## Generate Barrel File
 
-Right-click a folder in the Project panel and press `Ctrl+Alt+B`.
+Right-click a folder in the Project panel and press `Ctrl+Alt+B` / `Cmd+Alt+B`.
 
 ### What is a barrel file?
 

@@ -1,36 +1,52 @@
+<!--suppress PluginXmlCapitalization, PluginXmlI18n -->
 <idea-plugin>
     <id>com.kxaca.dartdatatoolkit</id>
     <name>Dart Data Toolkit</name>
     <vendor email="moisesmartins2584@gmail.com" url="https://github.com/moisesmartins-dev/dart-data-toolkit">KXACA</vendor>
     <description><![CDATA[
-        Dart code generator for Flutter: copyWith, toJson, fromJson, toString, and barrel files — no boilerplate, straight from the editor.<br/><br/>
+        Generate Dart methods and barrel files without the boilerplate.
 
-        <b>Features:</b>
+        <h2>Features</h2>
+
+        <h3>Dart Method Generator</h3>
         <ul>
-            <li><b>copyWith()</b> — creates a modified copy without changing the original</li>
-            <li><b>toJson()</b> — serializes the class to a <code>Map&lt;String, dynamic&gt;</code></li>
+            <li><b>copyWith()</b> — creates modified copies of the class</li>
+            <li><b>toJson()</b> — serializes the class to a JSON map</li>
             <li><b>fromJson()</b> — deserializes a class from a JSON map</li>
             <li><b>toString()</b> — formatted multiline string representation</li>
-            <li><b>JSON → Dart class</b> — paste a JSON object and generate a full Dart data class; nested objects become separate classes automatically</li>
-            <li><b>Barrel file</b> — export selected Dart files from a folder into a single index file</li>
+            <li>Supports nullable types (<code>String?</code>, <code>int?</code>, etc.)</li>
+            <li>Interactive dialog to choose individual methods</li>
+            <li>Shortcut: <code>Ctrl+Alt+D</code> (Windows/Linux) / <code>Cmd+Alt+D</code> (macOS)</li>
         </ul>
+        <img width="640" height="384" src="https://raw.githubusercontent.com/moisesmartins-dev/dart-data-toolkit/main/assets/dart_method_generator.png" alt="Dart Method Generator">
 
-        <b>Shortcuts:</b>
+        <h3>JSON to Dart Class</h3>
         <ul>
-            <li><code>Ctrl+Alt+D</code> — generate methods for the class at the cursor</li>
-            <li><code>Ctrl+Alt+J</code> — generate a Dart class from JSON</li>
-            <li><code>Ctrl+Alt+B</code> — generate a barrel file for a folder</li>
-            <li><code>Alt+Insert</code> — individual method actions in the Generate menu</li>
+            <li>Paste any JSON object and generate a complete Dart class</li>
+            <li><b>Nested objects</b> generate separate, properly typed Dart classes</li>
+            <li><code>toJson()</code> and <code>fromJson()</code> handle nested classes automatically</li>
+            <li>Choose which methods to include</li>
+            <li>Auto-formats JSON on paste</li>
+            <li>Shortcut: <code>Ctrl+Alt+J</code> (Windows/Linux) / <code>Cmd+Alt+J</code> (macOS)</li>
         </ul>
+        <img width="640" height="385" src="https://raw.githubusercontent.com/moisesmartins-dev/dart-data-toolkit/main/assets/json_to_dart_class.png" alt="JSON to Dart Class">
 
-        Supports nullable types (<code>String?</code>, <code>int?</code>), generic types (<code>List&lt;T&gt;</code>, <code>Map&lt;K, V&gt;</code>), and nested JSON objects.<br/><br/>
+        <h3>Barrel File Generator</h3>
+        <ul>
+            <li>Automatically exports all Dart files from a folder</li>
+            <li>File list with checkboxes — choose exactly what to include</li>
+            <li>Optional recursive mode for subdirectories</li>
+            <li>Shortcut: <code>Ctrl+Alt+B</code> (Windows/Linux) / <code>Cmd+Alt+B</code> (macOS)</li>
+        </ul>
+        <img width="640" height="386" src="https://raw.githubusercontent.com/moisesmartins-dev/dart-data-toolkit/main/assets/barrel_file_generator.png" alt="Barrel File Generator">
 
-        <b>Getting Started:</b>
+        <h2>Getting Started</h2>
         <ol>
             <li>Open a Dart file and place the cursor inside a class</li>
-            <li>Press <code>Ctrl+Alt+D</code> or right-click → <b>Dart Data Methods...</b></li>
+            <li>Press <code>Ctrl+Alt+D</code> / <code>Cmd+Alt+D</code> or right-click → <b>Dart Data Methods...</b></li>
             <li>Select the methods to generate and click OK</li>
         </ol>
+        <p>For detailed examples and advanced usage, see the <a href="https://github.com/moisesmartins-dev/dart-data-toolkit/blob/main/docs/usage-guide.md">Usage Guide</a>.</p>
 
         Found a bug or have a suggestion? <a href="https://github.com/moisesmartins-dev/dart-data-toolkit/issues">Open an issue on GitHub</a>.
     ]]></description>
@@ -38,15 +54,18 @@
     <change-notes><![CDATA[
         <b>1.0.0</b>
         <ul>
-            <li>copyWith(), toJson(), fromJson(), toString() generators</li>
-            <li>JSON → Dart class: paste JSON and generate a complete Dart class with auto-formatting</li>
-            <li>Nested JSON objects generate separate, properly typed Dart classes</li>
-            <li>toJson() calls .toJson() on nested class properties</li>
-            <li>fromJson() calls ClassName.fromJson() on nested class properties</li>
-            <li>Barrel file generator with checkbox UI and recursive mode</li>
-            <li>Individual method actions in the Generate menu (Alt+Insert)</li>
-            <li>Nullable and generic type support</li>
-            <li>Fixed: copyWith parameter list now includes trailing comma</li>
+            <li>✨ Dart method generator (copyWith, toJson, fromJson, toString)</li>
+            <li>✨ Barrel file generator (index.dart with 3 styles)</li>
+            <li>🎨 Interactive dialog to choose methods</li>
+            <li>🎨 Configurable dialog for barrel files</li>
+            <li>📚 Complete documentation</li>
+            <li>🧪 Working examples</li>
+            <li>⌨️ Shortcuts (Ctrl+Alt+D, Ctrl+Alt+J, Ctrl+Alt+B on Windows/Linux; Cmd+Alt+D, Cmd+Alt+J, Cmd+Alt+B on macOS)</li>
+            <li>✅ Nullable type support</li>
+            <li>✅ Recursive directory support</li>
+            <li>🏗️ Nested JSON object support in JSON-to-Dart generator — each nested object generates a separate Dart class</li>
+            <li>✅ <code>toJson()</code> calls <code>.toJson()</code> on custom class properties (nested objects)</li>
+            <li>✅ <code>fromJson()</code> calls <code>ClassName.fromJson(json['key'] as Map&lt;String, dynamic&gt;)</code> on custom class properties</li>
         </ul>
     ]]></change-notes>
 
@@ -95,6 +114,7 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt d"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta alt d"/>
         </action>
 
         <action
@@ -105,6 +125,7 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt j"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta alt j"/>
         </action>
 
         <action
@@ -116,6 +137,7 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt b"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta alt b"/>
         </action>
     </actions>
 </idea-plugin>
