@@ -5,7 +5,8 @@ data class DartProperty(
     val type: String,
     val isNullable: Boolean = false,
     val isRequired: Boolean = false,
-    val defaultValue: String? = null
+    val defaultValue: String? = null,
+    val isCustomClass: Boolean = false
 )
 
 data class DartClass(

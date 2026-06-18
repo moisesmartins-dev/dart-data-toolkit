@@ -8,7 +8,10 @@ class ToJsonGenerator {
         if (dartClass.properties.isEmpty()) return ""
 
         val jsonMap = dartClass.properties
-            .joinToString(",\n      ") { prop -> "'${prop.name}': ${prop.name}" }
+            .joinToString(",\n      ") { prop ->
+                if (prop.isCustomClass) "'${prop.name}': ${prop.name}.toJson()"
+                else "'${prop.name}': ${prop.name}"
+            }
 
         return """
             |
@@ -27,7 +30,10 @@ class FromJsonGenerator {
         if (dartClass.properties.isEmpty()) return ""
 
         val assignments = dartClass.properties
-            .joinToString(",\n      ") { prop -> "${prop.name}: json['${prop.name}']" }
+            .joinToString(",\n      ") { prop ->
+                if (prop.isCustomClass) "${prop.name}: ${prop.type}.fromJson(json['${prop.name}'] as Map<String, dynamic>)"
+                else "${prop.name}: json['${prop.name}']"
+            }
 
         return """
             |

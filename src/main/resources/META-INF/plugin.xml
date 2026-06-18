@@ -1,40 +1,52 @@
 <idea-plugin>
     <id>com.kxaca.dartdatatoolkit</id>
     <name>Dart Data Toolkit</name>
-    <vendor email="moisesmartins2584@gmail.com" url="https://github.com/moisesmartins-dev">KXACA</vendor>
+    <vendor email="moisesmartins2584@gmail.com" url="https://github.com/moisesmartins-dev/dart-data-toolkit">KXACA</vendor>
     <description><![CDATA[
-        Automatically generates essential methods for Dart classes directly from the editor.<br/><br/>
+        Dart code generator for Flutter: copyWith, toJson, fromJson, toString, and barrel files — no boilerplate, straight from the editor.<br/><br/>
 
         <b>Features:</b>
         <ul>
-            <li><b>copyWith()</b> — creates modified copies of the class</li>
-            <li><b>toJson()</b> — serializes the class to a JSON map</li>
+            <li><b>copyWith()</b> — creates a modified copy without changing the original</li>
+            <li><b>toJson()</b> — serializes the class to a <code>Map&lt;String, dynamic&gt;</code></li>
             <li><b>fromJson()</b> — deserializes a class from a JSON map</li>
             <li><b>toString()</b> — formatted multiline string representation</li>
-            <li><b>Dart Class from JSON</b> — generates a complete Dart class from a pasted JSON object</li>
-            <li><b>Barrel File</b> — exports selected Dart files from a folder into a single index file</li>
+            <li><b>JSON → Dart class</b> — paste a JSON object and generate a full Dart data class; nested objects become separate classes automatically</li>
+            <li><b>Barrel file</b> — export selected Dart files from a folder into a single index file</li>
         </ul>
 
         <b>Shortcuts:</b>
         <ul>
-            <li><code>Alt+Insert</code> — individual method actions inside the Generate menu</li>
-            <li><code>Ctrl+Alt+D</code> — generate multiple methods at once</li>
-            <li><code>Ctrl+Alt+J</code> — generate Dart class from JSON</li>
-            <li><code>Ctrl+Alt+B</code> — generate barrel file</li>
+            <li><code>Ctrl+Alt+D</code> — generate methods for the class at the cursor</li>
+            <li><code>Ctrl+Alt+J</code> — generate a Dart class from JSON</li>
+            <li><code>Ctrl+Alt+B</code> — generate a barrel file for a folder</li>
+            <li><code>Alt+Insert</code> — individual method actions in the Generate menu</li>
         </ul>
 
-        Supports nullable types (<code>String?</code>, <code>int?</code>, etc.) and generic types (<code>List&lt;T&gt;</code>, <code>Map&lt;K, V&gt;</code>).
+        Supports nullable types (<code>String?</code>, <code>int?</code>), generic types (<code>List&lt;T&gt;</code>, <code>Map&lt;K, V&gt;</code>), and nested JSON objects.<br/><br/>
+
+        <b>Getting Started:</b>
+        <ol>
+            <li>Open a Dart file and place the cursor inside a class</li>
+            <li>Press <code>Ctrl+Alt+D</code> or right-click → <b>Dart Data Methods...</b></li>
+            <li>Select the methods to generate and click OK</li>
+        </ol>
+
+        Found a bug or have a suggestion? <a href="https://github.com/moisesmartins-dev/dart-data-toolkit/issues">Open an issue on GitHub</a>.
     ]]></description>
 
     <change-notes><![CDATA[
         <b>1.0.0</b>
         <ul>
-            <li>Initial release</li>
             <li>copyWith(), toJson(), fromJson(), toString() generators</li>
-            <li>Dart class generation from JSON with auto-formatting</li>
+            <li>JSON → Dart class: paste JSON and generate a complete Dart class with auto-formatting</li>
+            <li>Nested JSON objects generate separate, properly typed Dart classes</li>
+            <li>toJson() calls .toJson() on nested class properties</li>
+            <li>fromJson() calls ClassName.fromJson() on nested class properties</li>
             <li>Barrel file generator with checkbox UI and recursive mode</li>
             <li>Individual method actions in the Generate menu (Alt+Insert)</li>
             <li>Nullable and generic type support</li>
+            <li>Fixed: copyWith parameter list now includes trailing comma</li>
         </ul>
     ]]></change-notes>
 

@@ -9,7 +9,7 @@ class CopyWithGenerator {
         if (dartClass.properties.isEmpty()) return ""
 
         val params = dartClass.properties
-            .joinToString(",\n    ") { prop -> buildParamDeclaration(prop) }
+            .joinToString(",\n    ", postfix = ",") { prop -> buildParamDeclaration(prop) }
 
         val assignments = dartClass.properties
             .joinToString(",\n      ") { prop ->

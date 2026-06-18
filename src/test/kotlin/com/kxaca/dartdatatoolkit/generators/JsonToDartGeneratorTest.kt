@@ -72,9 +72,33 @@ class JsonToDartGeneratorTest {
     }
 
     @Test
-    fun `infers nested object as Map`() {
+    fun `nested object generates separate class`() {
         val result = gen("""{"meta": {"key": "value"}}""")
-        assertTrue(result.contains("final Map<String, dynamic> meta;"))
+        assertTrue(result.contains("class Meta {"))
+        assertTrue(result.contains("final String key;"))
+        assertTrue(result.contains("class MyClass {"))
+        assertTrue(result.contains("final Meta meta;"))
+    }
+
+    @Test
+    fun `nested class gets selected methods`() {
+        val result = gen("""{"location": {"lat": -25.4, "lon": -49.25}}""", setOf("toJson", "fromJson"))
+        val locationBlock = result.substringBefore("class MyClass")
+        assertTrue(locationBlock.contains("toJson"))
+        assertTrue(locationBlock.contains("fromJson"))
+        assertTrue(result.contains("location.toJson()"))
+        assertTrue(result.contains("Location.fromJson("))
+    }
+
+    @Test
+    fun `deeply nested objects generate all classes`() {
+        val result = gen("""{"a": {"b": {"c": 1}}}""")
+        assertTrue(result.contains("class B {"))
+        assertTrue(result.contains("class A {"))
+        assertTrue(result.contains("class MyClass {"))
+        assertTrue(result.contains("final int c;"))
+        assertTrue(result.contains("final B b;"))
+        assertTrue(result.contains("final A a;"))
     }
 
     @Test

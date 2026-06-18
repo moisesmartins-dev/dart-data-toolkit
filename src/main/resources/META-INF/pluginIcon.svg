@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+  <!-- White background, 2px margin, rx=8 per JetBrains icon spec -->
+  <rect x="2" y="2" width="36" height="36" rx="8" ry="8" fill="white"/>
+
+  <!--
+    Flutter Logomark — official paths sourced from flutter/website (CC BY 4.0).
+    Flutter is a trademark of Google LLC.
+    Used in compliance with https://flutter.dev/brand
+    Scaled to left portion of icon: translate(3,10) scale(0.44)
+  -->
+  <g transform="translate(3,10) scale(0.44)">
+    <!-- Upper arm + lower-left: Flutter sky blue -->
+    <path d="M35.0631,20.0376 H21.7056 L10.0195,31.7265 L16.6969,38.4038 Z" fill="#54C5F8"/>
+    <path d="M6.68014,28.3864 L0,21.7063 L21.7063,0 H35.0638 Z" fill="#54C5F8"/>
+    <!-- Lower right: Flutter navy -->
+    <path d="M16.6975,38.4039 L21.7062,43.4126 H35.0637 L23.3749,31.7266 Z" fill="#01579B"/>
+    <!-- Center diamond: Flutter mid blue -->
+    <path d="M16.6966,25.0456 L10.019,31.7231 L16.6966,38.4007 L23.3741,31.7231 Z" fill="#29B6F6"/>
+  </g>
+
+  <!-- { — left curly brace, Flutter navy -->
+  <path d="M27,10 L25,10 L25,14.5 L23,20 L25,25.5 L25,30 L27,30"
+        stroke="#042B59" stroke-width="2.5" fill="none"
+        stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- } — right curly brace, Flutter navy -->
+  <path d="M31,10 L33,10 L33,14.5 L35,20 L33,25.5 L33,30 L31,30"
+        stroke="#042B59" stroke-width="2.5" fill="none"
+        stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

@@ -23,6 +23,8 @@ Um plugin poderoso para **Android Studio** e **IntelliJ IDEA** que gera automati
 
 ### JSON para Classe Dart
 - Cole qualquer objeto JSON e gere uma classe Dart completa
+- **Objetos aninhados** geram classes Dart separadas com tipagem correta
+- `toJson()` e `fromJson()` tratam classes aninhadas automaticamente
 - Escolha quais métodos incluir
 - Formatação automática do JSON ao colar
 - Atalho: `Ctrl+Alt+J`
@@ -67,10 +69,90 @@ class User {
 ### Gerar classe a partir de JSON
 
 1. Pressione `Ctrl+Alt+J` em qualquer arquivo Dart
-2. Digite o nome da classe
+2. Digite o nome da classe (ex: `User`)
 3. Cole o JSON (formatado automaticamente)
 4. Selecione quais métodos incluir
 5. Clique em OK
+
+```json
+{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "age": 30
+}
+```
+
+Gera:
+
+```dart
+class User {
+  final String name;
+  final String email;
+  final int age;
+
+  User({
+    required this.name,
+    required this.email,
+    required this.age,
+  });
+
+  User copyWith({
+    String? name,
+    String? email,
+    int? age,
+  }) {
+    return User(
+      name: name ?? this.name,
+      email: email ?? this.email,
+      age: age ?? this.age,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'email': email,
+      'age': age,
+    };
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json['name'],
+      email: json['email'],
+      age: json['age'],
+    );
+  }
+
+  @override
+  String toString() {
+    return '''
+      User(
+      name: $name,
+      email: $email,
+      age: $age,
+      )
+    ''';
+  }
+}
+```
+
+Objetos JSON aninhados são detectados automaticamente — cada um vira sua própria classe Dart.
+
+Dado:
+
+```json
+{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "address": {
+    "street": "Rua Principal, 123",
+    "city": "São Paulo"
+  }
+}
+```
+
+Duas classes são geradas: `Address` e `User`. `User.toJson()` chama `address.toJson()` e `User.fromJson()` chama `Address.fromJson(json['address'] as Map<String, dynamic>)`.
 
 ### Gerar barrel file
 
@@ -108,8 +190,12 @@ class User {
     required this.email,
     this.age,
   });
-  
-  User copyWith({String? name, String? email, int? age}) {
+
+  User copyWith({
+    String? name,
+    String? email,
+    int? age,
+  }) {
     return User(
       name: name ?? this.name,
       email: email ?? this.email,
@@ -121,7 +207,8 @@ class User {
     return {
       'name': name,
       'email': email,
-      'age': age,};
+      'age': age,
+    };
   }
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -186,6 +273,12 @@ MIT License — veja o arquivo [LICENSE](LICENSE) para detalhes.
 ---
 
 **Feito com ❤️ para a comunidade Dart e Flutter**
+
+---
+
+## Aviso de Marca Registrada
+
+O logotipo do Flutter utilizado no ícone deste plugin é uma marca registrada da Google LLC. Seu uso está em conformidade com as [Diretrizes de Marca do Flutter](https://flutter.dev/brand) sob a [Licença Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/). Este plugin não tem afiliação com o Google ou com a equipe do Flutter, nem é endossado por eles.
 
 ---
 

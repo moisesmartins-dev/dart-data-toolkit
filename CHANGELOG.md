@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-06-17
+## [Unreleased]
 
 ### Added
 - ✨ Dart method generator (copyWith, toJson, fromJson, toString)
@@ -17,19 +17,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 - ⌨️ Keyboard shortcuts (Ctrl+Alt+D and Ctrl+Alt+B)
 - ✅ Nullable type support
 - ✅ Recursive directory support
+- 🏗️ Nested JSON object support in JSON-to-Dart generator — each nested object generates a separate Dart class
+- ✅ `toJson()` calls `.toJson()` on custom class properties (nested objects)
+- ✅ `fromJson()` calls `ClassName.fromJson(json['key'] as Map<String, dynamic>)` on custom class properties
 
-### Features
-
-#### Method Generator
-- `copyWith()` - Creates copies with modified fields
-- `toJson()` - Serializes to JSON
-- `fromJson()` - Deserializes from JSON
-- `toString()` - Formatted representation
-
-#### Barrel File Generator
-- Simple - All exports in one file
-- Organized - Groups by folder
-- With Documentation - Includes comments
+### Fixed
+- 🐛 `copyWith` parameter list now correctly includes a trailing comma
 
 ---
 

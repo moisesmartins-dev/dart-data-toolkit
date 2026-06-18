@@ -23,6 +23,8 @@ A powerful plugin for **Android Studio** and **IntelliJ IDEA** that automaticall
 
 ### JSON to Dart Class
 - Paste any JSON object and generate a complete Dart class
+- **Nested objects** generate separate, properly typed Dart classes
+- `toJson()` and `fromJson()` handle nested classes automatically
 - Choose which methods to include
 - Auto-formats JSON on paste
 - Keyboard shortcut: `Ctrl+Alt+J`
@@ -67,10 +69,89 @@ class User {
 ### Generate class from JSON
 
 1. Press `Ctrl+Alt+J` anywhere in a Dart file
-2. Enter a class name
+2. Enter a class name (e.g. `User`)
 3. Paste your JSON (auto-formatted)
 4. Select which methods to include
 5. Click OK
+
+```json
+{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "age": 30
+}
+```
+
+Generates:
+
+```dart
+class User {
+  final String name;
+  final String email;
+  final int age;
+
+  User({
+    required this.name,
+    required this.email,
+    required this.age,
+  });
+
+  User copyWith({
+    String? name,
+    String? email,
+    int? age,
+  }) {
+    return User(
+      name: name ?? this.name,
+      email: email ?? this.email,
+      age: age ?? this.age,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'email': email,
+      'age': age,
+    };
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json['name'],
+      email: json['email'],
+      age: json['age'],
+    );
+  }
+
+  @override
+  String toString() {
+    return '''
+      User(
+      name: $name,
+      email: $email,
+      age: $age,
+      )
+    ''';
+  }
+}
+```
+
+Nested JSON objects are detected automatically — each becomes its own Dart class.
+
+Given:
+```json
+{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "address": {
+    "street": "123 Main St",
+    "city": "Springfield"
+  }
+}
+```
+
+Two classes are generated: `Address` and `User`. `User.toJson()` calls `address.toJson()` and `User.fromJson()` calls `Address.fromJson(json['address'] as Map<String, dynamic>)`.
 
 ### Generate barrel file
 
@@ -109,7 +190,11 @@ class User {
     this.age,
   });
 
-  User copyWith({String? name, String? email, int? age}) {
+  User copyWith({
+    String? name,
+    String? email,
+    int? age,
+  }) {
     return User(
       name: name ?? this.name,
       email: email ?? this.email,
@@ -187,6 +272,12 @@ MIT License — see [LICENSE](LICENSE) for details.
 ---
 
 **Made with ❤️ for the Dart and Flutter community**
+
+---
+
+## Trademark Notice
+
+The Flutter logo used in this plugin's icon is a trademark of Google LLC. It is used in accordance with the [Flutter Brand Guidelines](https://flutter.dev/brand) under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). This plugin is not affiliated with or endorsed by Google or the Flutter team.
 
 ---
 
