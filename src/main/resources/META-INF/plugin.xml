@@ -52,20 +52,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
-        <b>1.0.0</b>
+        <b>1.2.0</b>
         <ul>
-            <li>✨ Dart method generator (copyWith, toJson, fromJson, toString)</li>
-            <li>✨ Barrel file generator (index.dart with 3 styles)</li>
-            <li>🎨 Interactive dialog to choose methods</li>
-            <li>🎨 Configurable dialog for barrel files</li>
-            <li>📚 Complete documentation</li>
-            <li>🧪 Working examples</li>
-            <li>⌨️ Shortcuts (Ctrl+Alt+D, Ctrl+Alt+J, Ctrl+Alt+B on Windows/Linux; Cmd+Alt+D, Cmd+Alt+J, Cmd+Alt+B on macOS)</li>
-            <li>✅ Nullable type support</li>
-            <li>✅ Recursive directory support</li>
-            <li>🏗️ Nested JSON object support in JSON-to-Dart generator — each nested object generates a separate Dart class</li>
-            <li>✅ <code>toJson()</code> calls <code>.toJson()</code> on custom class properties (nested objects)</li>
-            <li>✅ <code>fromJson()</code> calls <code>ClassName.fromJson(json['key'] as Map&lt;String, dynamic&gt;)</code> on custom class properties</li>
+            <li>✨ Individual method actions now replace the existing method in place instead of inserting a duplicate</li>
+            <li>🐛 <code>toString()</code> now calls <code>.toString()</code> explicitly on custom-class properties</li>
         </ul>
     ]]></change-notes>
 
@@ -136,6 +126,7 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="NewGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt b"/>
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta alt b"/>
         </action>

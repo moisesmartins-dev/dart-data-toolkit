@@ -1,0 +1,24 @@
+{
+  "id": 42,
+  "full_name": "Jane Doe",
+  "email": "jane@example.com",
+  "score": 9.8,
+  "is_active": true,
+  "nickname": null,
+  "tags": ["kotlin", "dart", "flutter"],
+  "scores": [98, 87, 74],
+  "empty_list": [],
+  "metadata": {
+    "source": "web",
+    "version": 3
+  },
+  "address": {
+    "street": "123 Main St",
+    "city": "Springfield",
+    "zip_code": 12345,
+    "coordinates": {
+      "latitude": 37.7749,
+      "longitude": -122.4194
+    }
+  }
+}

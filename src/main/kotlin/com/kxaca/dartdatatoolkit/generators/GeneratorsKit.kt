@@ -51,18 +51,22 @@ class ToStringGenerator {
     fun generate(dartClass: DartClass): String {
         if (dartClass.properties.isEmpty()) return ""
 
-        val props = dartClass.properties
-            .joinToString("\n      ") { prop -> "${prop.name}: \$${prop.name}," }
+        val lines = dartClass.properties
+            .joinToString("\n        ") { prop ->
+                when {
+                    prop.isCustomClass && prop.isNullable -> "'  ${prop.name}: \${${prop.name}?.toString()},\\n'"
+                    prop.isCustomClass -> "'  ${prop.name}: \${${prop.name}.toString()},\\n'"
+                    else -> "'  ${prop.name}: \$${prop.name},\\n'"
+                }
+            }
 
         return """
             |
             |  @override
             |  String toString() {
-            |    return '''
-            |      ${dartClass.constructorName}(
-            |      $props
-            |      )
-            |    ''';
+            |    return '${dartClass.constructorName}(\n'
+            |        $lines
+            |        ')';
             |  }
         """.trimMargin()
     }

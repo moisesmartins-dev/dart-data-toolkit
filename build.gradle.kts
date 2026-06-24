@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.kxaca"
-version = "1.0.0"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         name = "Dart Data Toolkit"
-        version = "1.0.0"
+        version = "1.2.0"
         ideaVersion {
             sinceBuild = "233"
             untilBuild = "261.*"

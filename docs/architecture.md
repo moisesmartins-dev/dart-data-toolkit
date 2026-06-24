@@ -1,6 +1,6 @@
 # Architecture
 
-An overview of how the Dart Data Class Generator plugin is structured internally.
+An overview of how the Dart Data Toolkit plugin is structured internally.
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@ An overview of how the Dart Data Class Generator plugin is structured internally
 ## Package Structure
 
 ```
-src/main/kotlin/com/kxaca/dartplugin/
+src/main/kotlin/com/kxaca/dartdatatoolkit/
 ├── actions/                        # IntelliJ action entry points and dialogs
 │   ├── ChooseMethodsDialog.kt
 │   ├── GenerateBarrelDialog.kt
@@ -85,7 +85,10 @@ Parses raw Dart source text to extract class structure. No AST — uses regex di
 data class DartProperty(
     val name: String,
     val type: String,
-    val isNullable: Boolean
+    val isNullable: Boolean = false,
+    val isRequired: Boolean = false,
+    val defaultValue: String? = null,
+    val isCustomClass: Boolean = false
 )
 
 data class DartClass(
@@ -102,10 +105,11 @@ data class DartClass(
 1. Finds all `class` declarations via regex
 2. Picks the last one whose start offset is before the cursor
 3. Finds the matching closing brace with a depth counter
-4. Extracts properties using a two-alternative regex:
+4. Strips method bodies from the class text (depth-counter brace scan) to avoid false positives from local variables and return types inside methods
+5. Extracts properties using a two-alternative regex on the stripped text:
    - Alternative 1: `Type? name;` (nullable)
    - Alternative 2: `Type name;` (non-nullable)
-5. Filters out Dart keywords to avoid false positives from method declarations
+6. Filters out Dart keywords to avoid false positives from method declarations
 
 ### Supported property forms
 
@@ -158,7 +162,7 @@ Snake\_case and kebab-case keys are converted to camelCase before becoming field
 
 ### BarrelFileGenerator / BarrelFileAnalyzer
 
-`BarrelFileAnalyzer` walks a directory tree to find `.dart` files, excluding known index files (`index.dart`, `barrel.dart`) and special directories (`build/`, `.dart_tool/`, `.git/`).
+`BarrelFileAnalyzer` walks a directory tree to find `.dart` files, excluding existing barrel files (detected by reading their first line for the `/// This file is a barrel file` header), known index files (`index.dart`, `barrel.dart`), and special directories (`build/`, `.dart_tool/`, `.git/`).
 
 `BarrelFileGenerator` takes a list of `File` objects and produces export statements with paths relative to the base directory.
 
@@ -206,7 +210,9 @@ User triggers action
       → Set<String> (selected method names)
     → CopyWithGenerator / ToJsonGenerator / ... .generate(dartClass)
       → String (generated code)
-    → WriteCommandAction → document.insertString(endOffset, code)
+    → WriteCommandAction
+        → if method exists: document.deleteString(start, end) + insertString(newOffset, code)
+        → otherwise: document.insertString(endOffset, code)
 ```
 
 ### JSON to Dart class (`Ctrl+Alt+J` / `Cmd+Alt+J`)

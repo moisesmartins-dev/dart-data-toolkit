@@ -19,6 +19,17 @@ data class DartClass(
 
 class DartClassParser {
 
+    private val builtinDartTypes = setOf(
+        "String", "int", "double", "bool", "num", "dynamic", "Object",
+        "DateTime", "Duration", "Uri", "BigInt", "void"
+    )
+    private val collectionPrefixes = setOf("List", "Map", "Set", "Iterable", "Stream", "Future")
+
+    private fun isCustomClass(type: String): Boolean {
+        if (type in builtinDartTypes) return false
+        return collectionPrefixes.none { type == it || type.startsWith("$it<") }
+    }
+
     fun parseClass(content: String, cursorOffset: Int): DartClass? {
         val classRegex = Regex(
             """(?:abstract\s+)?class\s+(\w+)\s*(?:extends\s+\w+)?\s*(?:with\s+[\w\s,]+)?\s*\{"""
@@ -47,15 +58,29 @@ class DartClassParser {
         )
     }
 
+    private fun stripMethodBodies(classBody: String): String {
+        val sb = StringBuilder()
+        var depth = 0
+        for (ch in classBody) {
+            when (ch) {
+                '{' -> depth++
+                '}' -> depth--
+                else -> if (depth == 0) sb.append(ch)
+            }
+        }
+        return sb.toString()
+    }
+
     private fun parseProperties(classBody: String): List<DartProperty> {
         val properties = mutableListOf<DartProperty>()
+        val strippedBody = stripMethodBodies(classBody)
 
         // Matches: final String? name; / final int age; / List<String> tags; etc.
         val propertyRegex = Regex(
             """(?:(?:final|late|static)\s+)?([A-Za-z]\w*(?:<[^>]+>)?)(\?)\s+(\w+)\s*(?:=\s*[^;]+)?;|(?:(?:final|late|static)\s+)?([A-Za-z]\w*(?:<[^>]+>)?)\s+(\w+)\s*(?:=\s*[^;]+)?;"""
         )
 
-        propertyRegex.findAll(classBody).forEach { match ->
+        propertyRegex.findAll(strippedBody).forEach { match ->
             // Groups 1+2+3 = nullable type; groups 4+5 = non-nullable type
             val (type, name, isNullable) = if (match.groupValues[1].isNotEmpty()) {
                 Triple(match.groupValues[1], match.groupValues[3], true)
@@ -71,7 +96,7 @@ class DartClassParser {
             )
             if (name.isEmpty() || type in dartKeywords || name in dartKeywords) return@forEach
 
-            properties.add(DartProperty(name = name, type = type, isNullable = isNullable))
+            properties.add(DartProperty(name = name, type = type, isNullable = isNullable, isCustomClass = isCustomClass(type)))
         }
 
         return properties

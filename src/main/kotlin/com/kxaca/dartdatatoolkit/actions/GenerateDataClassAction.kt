@@ -47,13 +47,30 @@ class GenerateDataClassAction : AnAction() {
             return
         }
 
-        val generatedCode = generateMethods(dartClass, selectedMethods)
+        val classBody = document.text.substring(dartClass.startOffset, dartClass.endOffset)
+        val skipped = selectedMethods.filter { methodExistsInClassBody(classBody, it) }
+        val toGenerate = selectedMethods - skipped.toSet()
+
+        if (toGenerate.isEmpty()) {
+            showError(project, "All selected methods already exist in '${dartClass.name}'.")
+            return
+        }
+
+        if (skipped.isNotEmpty()) {
+            Messages.showWarningDialog(
+                project,
+                "Already exist and were skipped:\n" + skipped.joinToString(", ") { "$it()" },
+                "Methods Skipped"
+            )
+        }
+
+        val generatedCode = generateMethods(dartClass, toGenerate)
         insertCode(project, document, dartClass, generatedCode)
 
         Messages.showInfoMessage(
             project,
             "Methods generated successfully for class '${dartClass.name}':\n" +
-            selectedMethods.joinToString(", ") { "$it()" },
+            toGenerate.joinToString(", ") { "$it()" },
             "Success"
         )
     }

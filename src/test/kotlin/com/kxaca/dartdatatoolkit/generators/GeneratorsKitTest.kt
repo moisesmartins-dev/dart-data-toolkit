@@ -112,4 +112,22 @@ class GeneratorsKitTest {
         val result = ToStringGenerator().generate(cls(DartProperty("x", "String")))
         assertTrue(result.startsWith("\n"))
     }
+
+    @Test
+    fun `toString calls toString() on custom class properties`() {
+        val result = ToStringGenerator().generate(cls(
+            DartProperty("name", "String"),
+            DartProperty("address", "Address", isCustomClass = true)
+        ))
+        assertTrue(result.contains("name: \$name"))
+        assertTrue(result.contains("address: \${address.toString()}"))
+    }
+
+    @Test
+    fun `toString uses safe call on nullable custom class properties`() {
+        val result = ToStringGenerator().generate(cls(
+            DartProperty("billing", "Address", isNullable = true, isCustomClass = true)
+        ))
+        assertTrue(result.contains("billing: \${billing?.toString()}"))
+    }
 }

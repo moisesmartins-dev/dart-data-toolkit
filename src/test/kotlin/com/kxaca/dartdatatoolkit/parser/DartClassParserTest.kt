@@ -149,6 +149,43 @@ class DartClassParserTest {
     }
 
     @Test
+    fun `ignores local variables inside method bodies`() {
+        val code = """
+            class CouponItemModel {
+              final String description;
+              final String code;
+              CouponItem toEntity() {
+                String uuid = "x";
+                return CouponItem(uuid: uuid);
+              }
+            }
+        """.trimIndent()
+        val result = parser.parseClass(code, 30)!!
+        assertEquals(2, result.properties.size)
+        val names = result.properties.map { it.name }
+        assertTrue(names.containsAll(listOf("description", "code")))
+        assertFalse(names.contains("uuid"))
+    }
+
+    @Test
+    fun `detects custom class types`() {
+        val code = """
+            class Order {
+              final Address address;
+              final Address? billing;
+              final String name;
+              final List<String> tags;
+            }
+        """.trimIndent()
+        val result = parser.parseClass(code, 20)!!
+        val byName = result.properties.associateBy { it.name }
+        assertTrue(byName["address"]!!.isCustomClass)
+        assertTrue(byName["billing"]!!.isCustomClass)
+        assertFalse(byName["name"]!!.isCustomClass)
+        assertFalse(byName["tags"]!!.isCustomClass)
+    }
+
+    @Test
     fun `parses multiple mixed-nullability properties`() {
         val code = """
             class Product {

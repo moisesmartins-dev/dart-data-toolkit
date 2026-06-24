@@ -19,6 +19,7 @@ Um plugin poderoso para **Android Studio** e **IntelliJ IDEA** que gera automati
 - **toString()** — representação em string formatada com multiline
 - Suporte a tipos anuláveis (`String?`, `int?`, etc.)
 - Dialog interativo para escolher métodos individualmente
+- Tratamento inteligente de duplicatas — o dialog em lote avisa e pula métodos que já existem; ações individuais substituem o método existente no lugar
 - Atalho: `Ctrl+Alt+D` (Windows/Linux) / `Cmd+Alt+D` (macOS)
 
 ### JSON para Classe Dart
@@ -40,12 +41,12 @@ Um plugin poderoso para **Android Studio** e **IntelliJ IDEA** que gera automati
 1. Compile o plugin: `./gradlew buildPlugin`
 2. No Android Studio / IntelliJ IDEA: **File → Settings → Plugins**
 3. Clique no ícone de engrenagem → **Install Plugin from Disk**
-4. Selecione `build/distributions/dart-data-toolkit-1.0.0.zip`
+4. Selecione `build/distributions/dart-data-toolkit-1.2.0.zip`
 5. Reinicie a IDE
 
 ## Como usar
 
-> Para exemplos detalhados e uso avançado, consulte o [Guia de Uso](docs/usage-guide.md).
+> Para exemplos detalhados e uso avançado, consulte o [Guia de Uso](https://github.com/moisesmartins-dev/dart-data-toolkit/blob/main/docs/usage-guide.md).
 
 ### Gerar métodos Dart
 
@@ -260,17 +261,17 @@ src/main/kotlin/com/kxaca/dartdatatoolkit/
 Requisitos: JDK 17+, Gradle 8.8 (fixado via wrapper)
 
 ```bash
-./gradlew buildPlugin    # gera build/distributions/dart-data-plugin-1.0.0.zip
+./gradlew buildPlugin    # gera build/distributions/dart-data-toolkit-1.2.0.zip
 ./gradlew runIde         # abre uma IDE sandbox com o plugin instalado
 ```
 
 ## Contribuindo
 
-Veja [CONTRIBUTING.pt-BR.md](CONTRIBUTING.pt-BR.md) para diretrizes sobre como reportar bugs, sugerir features e enviar pull requests.
+Veja [CONTRIBUTING.pt-BR.md](https://github.com/moisesmartins-dev/dart-data-toolkit/blob/main/CONTRIBUTING.pt-BR.md) para diretrizes sobre como reportar bugs, sugerir features e enviar pull requests.
 
 ## Licença
 
-MIT License — veja o arquivo [LICENSE](LICENSE) para detalhes.
+MIT License — veja o arquivo [LICENSE](https://github.com/moisesmartins-dev/dart-data-toolkit/blob/main/LICENSE) para detalhes.
 
 ---
 
@@ -284,4 +285,4 @@ O logotipo do Flutter utilizado no ícone deste plugin é uma marca registrada d
 
 ---
 
-> Also available in [English](README.md)
+> Also available in [English](https://github.com/moisesmartins-dev/dart-data-toolkit/blob/main/README.md)

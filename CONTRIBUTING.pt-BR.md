@@ -96,4 +96,4 @@ Todos os PRs passam por review antes de serem merged:
 
 ---
 
-> Also available in [English](CONTRIBUTING.md)
+> Also available in [English](https://github.com/moisesmartins-dev/dart-data-toolkit/blob/main/CONTRIBUTING.md)

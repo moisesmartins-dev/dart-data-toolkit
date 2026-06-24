@@ -188,4 +188,4 @@ java -version  # requer JDK 17+
 
 ---
 
-> Also available in [English](PUBLISHING.md)
+> Also available in [English](https://github.com/moisesmartins-dev/dart-data-toolkit/blob/main/PUBLISHING.md)

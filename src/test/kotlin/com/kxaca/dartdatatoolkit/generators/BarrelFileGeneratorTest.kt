@@ -142,6 +142,18 @@ class BarrelFileGeneratorTest {
     }
 
     @Test
+    fun `excludes barrel files from results`() {
+        val base = tmp.root
+        val barrel = File(base, "my_lib.dart")
+        barrel.writeText("/// This file is a barrel file. It exports all public APIs from this package.\n")
+        File(base, "user.dart").writeText("class User {}")
+
+        val files = analyzer.findDartFiles(base, recursive = false)
+        assertEquals(1, files.size)
+        assertEquals("user.dart", files[0].name)
+    }
+
+    @Test
     fun `results are sorted by filename`() {
         val base = tmp.root
         File(base, "zebra.dart").createNewFile()
