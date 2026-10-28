@@ -54,11 +54,6 @@ class GenerateBarrelFileAction : AnAction() {
             try {
                 File(baseDir, fileName).writeText(content)
                 baseVDir.refresh(false, true)
-                Messages.showInfoMessage(
-                    project,
-                    "'$fileName' generated with ${files.size} file(s) exported.",
-                    "Success"
-                )
             } catch (ex: Exception) {
                 Messages.showErrorDialog(project, "Failed to create barrel file: ${ex.message}", "Error")
             }

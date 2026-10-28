@@ -162,7 +162,7 @@ Chaves em snake\_case e kebab-case são convertidas para camelCase antes de se t
 
 ### BarrelFileGenerator / BarrelFileAnalyzer
 
-`BarrelFileAnalyzer` percorre uma árvore de diretórios para encontrar arquivos `.dart`, excluindo barrel files existentes (detectados pela leitura da primeira linha com o header `/// This file is a barrel file`), arquivos de índice conhecidos (`index.dart`, `barrel.dart`) e diretórios especiais (`build/`, `.dart_tool/`, `.git/`).
+`BarrelFileAnalyzer` percorre uma árvore de diretórios para encontrar arquivos `.dart`, excluindo barrel files existentes (detectados pela leitura da primeira linha com o header `// This file is a barrel file`; a forma antiga com `///`, escrita até a versão 1.2.0, também é reconhecida), arquivos de índice conhecidos (`index.dart`, `barrel.dart`) e diretórios especiais (`build/`, `.dart_tool/`, `.git/`).
 
 `BarrelFileGenerator` recebe uma lista de objetos `File` e produz instruções de exportação com caminhos relativos ao diretório base.
 
