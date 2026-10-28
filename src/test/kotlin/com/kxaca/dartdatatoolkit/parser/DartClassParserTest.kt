@@ -204,4 +204,80 @@ class DartClassParserTest {
         assertFalse(byName["price"]!!.isNullable)
         assertTrue(byName["stock"]!!.isNullable)
     }
+
+    // ── parseAllClasses ───────────────────────────────────────────────────────
+
+    @Test
+    fun `parseAllClasses returns every class in order`() {
+        val code = """
+            class A {
+              final int x;
+            }
+
+            abstract class B {
+              final String y;
+            }
+
+            class C extends B {
+              final bool z;
+            }
+        """.trimIndent()
+
+        val result = parser.parseAllClasses(code)
+        assertEquals(listOf("A", "B", "C"), result.map { it.name })
+        assertEquals(listOf("x"), result[0].properties.map { it.name })
+        assertEquals(listOf("y"), result[1].properties.map { it.name })
+        assertEquals(listOf("z"), result[2].properties.map { it.name })
+    }
+
+    @Test
+    fun `parseAllClasses returns empty list when there is no class`() {
+        assertTrue(parser.parseAllClasses("void main() {}").isEmpty())
+    }
+
+    // ── static / copyable properties ──────────────────────────────────────────
+
+    @Test
+    fun `flags static fields`() {
+        val code = """
+            class Config {
+              static const int maxItems = 10;
+              static final String kind = 'cfg';
+              static String label = 'x';
+              final String name;
+            }
+        """.trimIndent()
+
+        val byName = parser.parseClass(code, 10)!!.properties.associateBy { it.name }
+        assertTrue(byName["maxItems"]!!.isStatic)
+        assertTrue(byName["kind"]!!.isStatic)
+        assertTrue(byName["label"]!!.isStatic)
+        assertFalse(byName["name"]!!.isStatic)
+    }
+
+    @Test
+    fun `a default value containing the word static does not flag the field`() {
+        val code = """
+            class Config {
+              final String mode = 'static value';
+            }
+        """.trimIndent()
+
+        assertFalse(parser.parseClass(code, 10)!!.properties.single().isStatic)
+    }
+
+    @Test
+    fun `copyableProperties excludes static and private fields`() {
+        val code = """
+            class User {
+              static const int maxAge = 120;
+              final String _secret;
+              final String name;
+              final int age;
+            }
+        """.trimIndent()
+
+        val result = parser.parseClass(code, 10)!!
+        assertEquals(listOf("name", "age"), result.copyableProperties.map { it.name })
+    }
 }

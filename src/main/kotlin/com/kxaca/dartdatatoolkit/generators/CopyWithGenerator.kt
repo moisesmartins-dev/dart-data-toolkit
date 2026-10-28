@@ -6,12 +6,13 @@ import com.kxaca.dartdatatoolkit.parser.DartProperty
 class CopyWithGenerator {
 
     fun generate(dartClass: DartClass): String {
-        if (dartClass.properties.isEmpty()) return ""
+        val properties = dartClass.copyableProperties
+        if (properties.isEmpty()) return ""
 
-        val params = dartClass.properties
+        val params = properties
             .joinToString(",\n    ", postfix = ",") { prop -> buildParamDeclaration(prop) }
 
-        val assignments = dartClass.properties
+        val assignments = properties
             .joinToString(",\n      ") { prop ->
                 "${prop.name}: ${prop.name} ?? this.${prop.name}"
             }

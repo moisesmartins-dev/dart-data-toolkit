@@ -13,6 +13,26 @@ class CopyWithGeneratorTest {
         DartClass(name = "User", properties = props.toList(), startOffset = 0, endOffset = 0)
 
     @Test
+    fun `skips static and private properties`() {
+        val result = generator.generate(
+            cls(
+                DartProperty("name", "String"),
+                DartProperty("maxAge", "int", isStatic = true),
+                DartProperty("_secret", "String")
+            )
+        )
+        assertTrue(result.contains("String? name"))
+        assertFalse(result.contains("maxAge"))
+        assertFalse(result.contains("_secret"))
+    }
+
+    @Test
+    fun `returns empty string when only static or private properties exist`() {
+        val result = generator.generate(cls(DartProperty("_secret", "String"), DartProperty("max", "int", isStatic = true)))
+        assertEquals("", result)
+    }
+
+    @Test
     fun `returns empty string when no properties`() {
         assertEquals("", generator.generate(cls()))
     }

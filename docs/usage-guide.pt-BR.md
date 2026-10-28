@@ -58,6 +58,10 @@ final updated = user.copyWith(name: 'Bob');
 ```
 
 > Todos os parâmetros são tornados nullable para que você precise passar apenas os campos que deseja alterar.
+>
+> Campos `static` e privados (`_name`) não são incluídos, porque não podem ser copiados por parâmetros nomeados.
+
+**Mantendo o copyWith atualizado:** se você adicionar um campo à classe depois, o plugin mostra um warning no nome `copyWith` (`copyWith() is missing parameters for: ...`). Pressione **Alt+Enter** (Option+Enter no macOS) e escolha **Generate copyWith** para regenerá-lo no lugar. A inspeção se chama *copyWith() is missing class fields* (Settings → Editor → Inspections → Dart Data Toolkit) e requer o plugin Dart.
 
 ---
 

@@ -62,6 +62,7 @@
     <idea-version since-build="233" until-build="262.*"/>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends optional="true" config-file="dart-inspections.xml">Dart</depends>
 
     <actions>
         <action

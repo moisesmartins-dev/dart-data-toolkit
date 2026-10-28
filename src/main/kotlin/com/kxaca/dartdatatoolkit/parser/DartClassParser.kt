@@ -6,7 +6,8 @@ data class DartProperty(
     val isNullable: Boolean = false,
     val isRequired: Boolean = false,
     val defaultValue: String? = null,
-    val isCustomClass: Boolean = false
+    val isCustomClass: Boolean = false,
+    val isStatic: Boolean = false
 )
 
 data class DartClass(
@@ -15,7 +16,12 @@ data class DartClass(
     val startOffset: Int,
     val endOffset: Int,
     val constructorName: String = name
-)
+) {
+    // Instance fields that can be passed to copyWith: static fields are not part of the instance
+    // and private ones (_name) cannot be used as named parameters in Dart.
+    val copyableProperties: List<DartProperty>
+        get() = properties.filter { !it.isStatic && !it.name.startsWith("_") }
+}
 
 class DartClassParser {
 
@@ -30,14 +36,25 @@ class DartClassParser {
         return collectionPrefixes.none { type == it || type.startsWith("$it<") }
     }
 
-    fun parseClass(content: String, cursorOffset: Int): DartClass? {
-        val classRegex = Regex(
-            """(?:abstract\s+)?class\s+(\w+)\s*(?:extends\s+\w+)?\s*(?:with\s+[\w\s,]+)?\s*\{"""
-        )
+    private val classRegex = Regex(
+        """(?:abstract\s+)?class\s+(\w+)\s*(?:extends\s+\w+)?\s*(?:with\s+[\w\s,]+)?\s*\{"""
+    )
 
+    // Matches a "static" modifier sitting right before a field the property regex matched from a later modifier
+    private val staticPrefixRegex = Regex("""\bstatic(?:\s+(?:final|late|const))*\s*$""")
+    private val staticStartRegex = Regex("""^static\s""")
+
+    fun parseClass(content: String, cursorOffset: Int): DartClass? {
         val classMatch = classRegex.findAll(content)
             .lastOrNull { it.range.first < cursorOffset } ?: return null
 
+        return buildClass(content, classMatch)
+    }
+
+    fun parseAllClasses(content: String): List<DartClass> =
+        classRegex.findAll(content).mapNotNull { buildClass(content, it) }.toList()
+
+    private fun buildClass(content: String, classMatch: MatchResult): DartClass? {
         val className = classMatch.groupValues[1]
         val classStartOffset = classMatch.range.first
 
@@ -96,7 +113,18 @@ class DartClassParser {
             )
             if (name.isEmpty() || type in dartKeywords || name in dartKeywords) return@forEach
 
-            properties.add(DartProperty(name = name, type = type, isNullable = isNullable, isCustomClass = isCustomClass(type)))
+            val isStatic = staticStartRegex.containsMatchIn(match.value) ||
+                staticPrefixRegex.containsMatchIn(strippedBody.substring(0, match.range.first))
+
+            properties.add(
+                DartProperty(
+                    name = name,
+                    type = type,
+                    isNullable = isNullable,
+                    isCustomClass = isCustomClass(type),
+                    isStatic = isStatic
+                )
+            )
         }
 
         return properties

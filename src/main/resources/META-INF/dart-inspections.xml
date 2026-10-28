@@ -1,0 +1,13 @@
+<!-- Loaded only when the Dart plugin is present (see the optional <depends> in plugin.xml) -->
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <localInspection
+            language="Dart"
+            shortName="DartCopyWithMissingParams"
+            displayName="copyWith() is missing class fields"
+            groupName="Dart Data Toolkit"
+            enabledByDefault="true"
+            level="WARNING"
+            implementationClass="com.kxaca.dartdatatoolkit.inspections.CopyWithInspection"/>
+    </extensions>
+</idea-plugin>
