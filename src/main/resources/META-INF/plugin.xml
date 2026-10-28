@@ -59,10 +59,14 @@
     ]]></description>
 
     <change-notes><![CDATA[
-        <b>1.2.0</b>
+        <b>1.3.0</b>
         <ul>
-            <li>✨ Individual method actions now replace the existing method in place instead of inserting a duplicate</li>
-            <li>🐛 <code>toString()</code> now calls <code>.toString()</code> explicitly on custom-class properties</li>
+            <li>✨ New inspection: a warning when a class's <code>copyWith()</code> is missing parameters for some of its fields, with a <b>Generate copyWith</b> quick fix (<code>Alt+Enter</code>). Requires the Dart plugin</li>
+            <li>🔧 Barrel file header now uses <code>//</code> instead of <code>///</code>; barrel files from earlier versions are still recognised</li>
+            <li>🔧 Generating a barrel file no longer shows a success dialog</li>
+            <li>🔧 Generated <code>copyWith()</code> no longer includes <code>static</code> or private (<code>_name</code>) fields</li>
+            <li>🔧 Compatible with IntelliJ IDEA 2026.2 and Android Studio builds based on it</li>
+            <li>🐛 <code>static final</code> / <code>static const</code> fields are no longer parsed as instance properties</li>
         </ul>
     ]]></change-notes>
 

@@ -5,7 +5,7 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto segue [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.0] - 2026-10-28
 
 ### Added
 - ✨ Nova inspeção **"copyWith() is missing class fields"** (warning): avisa quando um `copyWith` não tem parâmetro para um ou mais campos da classe, com o quick fix **Generate copyWith** (Alt+Enter) que regenera o método no lugar. Requer o plugin Dart; sem ele, o restante do plugin funciona normalmente

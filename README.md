@@ -46,7 +46,7 @@ A powerful plugin for **Android Studio** and **IntelliJ IDEA** that automaticall
 1. Build the plugin: `./gradlew buildPlugin`
 2. In Android Studio / IntelliJ IDEA: **File → Settings → Plugins**
 3. Click the gear icon → **Install Plugin from Disk**
-4. Select `build/distributions/dart-data-toolkit-1.2.0.zip`
+4. Select `build/distributions/dart-data-toolkit-1.3.0.zip`
 5. Restart the IDE
 
 ## Usage
@@ -269,7 +269,7 @@ src/main/kotlin/com/kxaca/dartdatatoolkit/
 Requirements: JDK 17+, Gradle 8.14.4 (pinned via wrapper)
 
 ```bash
-./gradlew buildPlugin    # produces build/distributions/dart-data-toolkit-1.2.0.zip
+./gradlew buildPlugin    # produces build/distributions/dart-data-toolkit-1.3.0.zip
 ./gradlew runIde         # launches a sandbox IDE with the plugin installed
 ```
 
