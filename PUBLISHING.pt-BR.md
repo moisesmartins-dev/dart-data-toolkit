@@ -173,7 +173,7 @@ java -version  # requer JDK 17+
 ```
 
 **Plugin não instala na IDE**
-- Verifique a compatibilidade: `since-build="233"` até `until-build="261.*"`
+- Verifique a compatibilidade: `since-build="233"` até `until-build="262.*"`
 - Confirme que o `.zip` não está corrompido
 - Tente instalar via **File → Settings → Plugins → gear → Install from Disk**
 

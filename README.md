@@ -22,6 +22,11 @@ A powerful plugin for **Android Studio** and **IntelliJ IDEA** that automaticall
 - Smart duplicate handling — the batch dialog warns and skips methods that already exist; individual actions replace the existing method in place
 - Keyboard shortcut: `Ctrl+Alt+D` (Windows/Linux) / `Cmd+Alt+D` (macOS)
 
+### copyWith Inspection
+- Warns when a class's `copyWith()` has no parameter for one or more of its fields (for example after adding a new field)
+- **Generate copyWith** quick fix (`Alt+Enter`) regenerates the method in place
+- Requires the Dart plugin; without it the rest of the plugin works as usual
+
 ### JSON to Dart Class
 - Paste any JSON object and generate a complete Dart class
 - **Nested objects** generate separate, properly typed Dart classes
@@ -251,6 +256,10 @@ src/main/kotlin/com/kxaca/dartdatatoolkit/
 │   ├── GeneratorsKit.kt               # ToJson, FromJson, ToString
 │   ├── JsonToDartGenerator.kt
 │   └── BarrelFileGenerator.kt
+├── inspections/
+│   ├── CopyWithInspection.kt          # "copyWith() is missing class fields" warning
+│   ├── GenerateCopyWithQuickFix.kt    # "Generate copyWith" quick fix
+│   └── CopyWithAnalysis.kt            # Finds outdated copyWith, builds the replacement
 └── parser/
     └── DartClassParser.kt
 ```

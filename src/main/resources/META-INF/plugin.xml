@@ -20,6 +20,13 @@
         </ul>
         <img width="640" height="384" src="https://raw.githubusercontent.com/moisesmartins-dev/dart-data-toolkit/main/assets/dart_method_generator.png" alt="Dart Method Generator">
 
+        <h3>copyWith Inspection</h3>
+        <ul>
+            <li>Warns when a class's <code>copyWith()</code> has no parameter for one or more of its fields</li>
+            <li><b>Generate copyWith</b> quick fix (<code>Alt+Enter</code>) regenerates the method in place</li>
+            <li>Requires the Dart plugin</li>
+        </ul>
+
         <h3>JSON to Dart Class</h3>
         <ul>
             <li>Paste any JSON object and generate a complete Dart class</li>

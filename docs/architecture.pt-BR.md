@@ -8,6 +8,7 @@ Uma visão geral de como o plugin Dart Data Toolkit é estruturado internamente.
 - [Visão em Camadas](#visão-em-camadas)
 - [Parser](#parser)
 - [Generators](#generators)
+- [Inspections](#inspections)
 - [Actions](#actions)
 - [Dialogs](#dialogs)
 - [Fluxo de Dados](#fluxo-de-dados)
@@ -31,6 +32,10 @@ src/main/kotlin/com/kxaca/dartdatatoolkit/
 │   ├── CopyWithGenerator.kt
 │   ├── GeneratorsKit.kt            # ToJsonGenerator, FromJsonGenerator, ToStringGenerator
 │   └── JsonToDartGenerator.kt
+├── inspections/                    # Warnings e quick fixes no editor (exigem o plugin Dart)
+│   ├── CopyWithAnalysis.kt         # Encontra copyWith desatualizado e monta a edição de substituição
+│   ├── CopyWithInspection.kt       # LocalInspectionTool: "copyWith() is missing class fields"
+│   └── GenerateCopyWithQuickFix.kt # LocalQuickFix: "Generate copyWith"
 └── parser/
     └── DartClassParser.kt          # DartClass + DartProperty + DartClassParser
 ```
@@ -71,6 +76,8 @@ src/main/kotlin/com/kxaca/dartdatatoolkit/
 
 As camadas são estritamente unidirecionais: Actions chamam Dialogs e Generators; Generators são funções puras sem dependências do IntelliJ.
 
+Inspections são um segundo ponto de entrada ao lado das Actions: quem as executa é a IDE, em segundo plano, e não o usuário. Elas chamam o Parser e o `CopyWithGenerator` diretamente e nunca abrem dialogs.
+
 ---
 
 ## Parser
@@ -88,7 +95,8 @@ data class DartProperty(
     val isNullable: Boolean = false,
     val isRequired: Boolean = false,
     val defaultValue: String? = null,
-    val isCustomClass: Boolean = false
+    val isCustomClass: Boolean = false,
+    val isStatic: Boolean = false
 )
 
 data class DartClass(
@@ -97,7 +105,10 @@ data class DartClass(
     val startOffset: Int,   // offset de caractere da palavra-chave 'class'
     val endOffset: Int,     // offset de caractere do '}' de fechamento
     val constructorName: String
-)
+) {
+    // Campos não estáticos e não privados: os que o copyWith aceita como parâmetros nomeados
+    val copyableProperties: List<DartProperty>
+}
 ```
 
 ### Como funciona
@@ -110,6 +121,9 @@ data class DartClass(
    - Alternativa 1: `Type? name;` (nullable)
    - Alternativa 2: `Type name;` (não-nullable)
 6. Filtra palavras-chave do Dart para evitar falsos positivos em declarações de métodos
+7. Marca o campo como `isStatic` quando um modificador `static` o precede (incluindo `static final` e `static const`)
+
+`parseClass` retorna apenas a classe anterior ao cursor. `parseAllClasses(content)` retorna todas as classes do arquivo e é usado pela inspeção, que não tem cursor.
 
 ### Formas de propriedade suportadas
 
@@ -122,6 +136,8 @@ String? description;
 late double value;
 ```
 
+Campos `static` são analisados, mas marcados como `isStatic`, e campos privados (`_name`) são analisados normalmente; ambos ficam fora de `copyableProperties`.
+
 ---
 
 ## Generators
@@ -130,7 +146,7 @@ Todos os generators são **funções puras** — recebem um `DartClass` e retorn
 
 ### CopyWithGenerator
 
-Produz um método `copyWith()`. Todos os parâmetros são tipados como nullable para que os chamadores possam omitir campos não alterados, usando `??` para recorrer a `this.field`.
+Produz um método `copyWith()`. Todos os parâmetros são tipados como nullable para que os chamadores possam omitir campos não alterados, usando `??` para recorrer a `this.field`. Ele usa `DartClass.copyableProperties`, então campos `static` e privados (`_name`) não são incluídos: não podem ser passados como parâmetros nomeados.
 
 ### ToJsonGenerator
 
@@ -165,6 +181,30 @@ Chaves em snake\_case e kebab-case são convertidas para camelCase antes de se t
 `BarrelFileAnalyzer` percorre uma árvore de diretórios para encontrar arquivos `.dart`, excluindo barrel files existentes (detectados pela leitura da primeira linha com o header `// This file is a barrel file`; a forma antiga com `///`, escrita até a versão 1.2.0, também é reconhecida), arquivos de índice conhecidos (`index.dart`, `barrel.dart`) e diretórios especiais (`build/`, `.dart_tool/`, `.git/`).
 
 `BarrelFileGenerator` recebe uma lista de objetos `File` e produz instruções de exportação com caminhos relativos ao diretório base.
+
+---
+
+## Inspections
+
+**`CopyWithInspection`** (`inspections/CopyWithInspection.kt`) é uma `LocalInspectionTool` que reporta um `copyWith()` sem parâmetro para um ou mais campos da sua classe. Como o resto do plugin, ela trabalha sobre o texto do arquivo, não sobre o PSI do Dart, então não precisa de classes do Dart em tempo de compilação.
+
+| Classe | Papel |
+|---|---|
+| `CopyWithAnalysis` | Lógica pura. `findOutdatedCopyWith(text)` compara `copyableProperties` com os nomes de parâmetros lidos do `copyWith` de cada classe; `buildReplacement(text, className)` devolve a edição que o regenera |
+| `CopyWithInspection` | Transforma cada achado em um `WARNING` sobre o identificador `copyWith` |
+| `GenerateCopyWithQuickFix` | Aplica a edição de `buildReplacement`. A classe é procurada de novo pelo nome quando o fix roda, porque o documento pode ter mudado desde a inspeção |
+
+A análise fica em silêncio em vez de adivinhar quando não consegue ler o método: uma chamada `copyWith(...)` dentro de outro método não é tratada como a declaração, e um `copyWith` que ela não consegue interpretar não gera warning.
+
+### Registro
+
+A inspeção é declarada em `META-INF/dart-inspections.xml`, carregado por uma dependência opcional no `plugin.xml`:
+
+```xml
+<depends optional="true" config-file="dart-inspections.xml">Dart</depends>
+```
+
+`language="Dart"` só resolve quando o plugin Dart está carregado. Com a dependência opcional, o toolkit continua instalando e funcionando sem ele; apenas a inspeção fica ausente. A descrição da inspeção fica em `inspectionDescriptions/DartCopyWithMissingParams.html`.
 
 ---
 
@@ -242,4 +282,22 @@ Usuário dispara a action
       → String (instruções de exportação)
     → File(baseDir, fileName).writeText(content)
     → baseVDir.refresh() → IDE detecta o novo arquivo
+```
+
+Nenhum diálogo de confirmação é exibido em caso de sucesso; apenas erros são informados.
+
+### copyWith desatualizado (inspeção + quick fix)
+
+```
+A IDE executa CopyWithInspection.checkFile(file)
+  → CopyWithAnalysis.findOutdatedCopyWith(file.text)
+    → DartClassParser.parseAllClasses(text)
+    → por classe: copyableProperties menos os nomes de parâmetros do copyWith
+  → ProblemDescriptor (WARNING em "copyWith") + GenerateCopyWithQuickFix(className)
+
+Usuário pressiona Alt+Enter → "Generate copyWith"
+  → CopyWithAnalysis.buildReplacement(document.text, className)
+    → findMethodBounds(...) localiza o método existente
+    → CopyWithGenerator.generate(dartClass)
+  → document.replaceString(start, end, code)   # mesma posição, não vai para o fim da classe
 ```
