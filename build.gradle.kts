@@ -1,7 +1,7 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.22"
-    id("org.jetbrains.intellij.platform") version "2.2.0"
+    id("org.jetbrains.kotlin.jvm") version "2.4.21"
+    id("org.jetbrains.intellij.platform") version "2.10.5"
 }
 
 group = "com.kxaca"
@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity("2023.3.1")
+        intellijIdea("2026.2.3")
         bundledPlugin("com.intellij.java")
     }
     testImplementation("junit:junit:4.13.2")
@@ -28,7 +28,7 @@ intellijPlatform {
         version = "1.2.0"
         ideaVersion {
             sinceBuild = "233"
-            untilBuild = "261.*"
+            untilBuild = "262.*"
         }
     }
 }
@@ -44,7 +44,7 @@ tasks {
     }
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+        compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 
 }

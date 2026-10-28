@@ -7,7 +7,7 @@ A powerful plugin for **Android Studio** and **IntelliJ IDEA** that automaticall
 3. **Barrel files** — index.dart with organized exports
 
 [![JetBrains Plugin](https://img.shields.io/badge/JetBrains-Plugin-brightgreen)](https://plugins.jetbrains.com/)
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.22-blue)](https://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.21-blue)](https://kotlinlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 ## Features
@@ -257,7 +257,7 @@ src/main/kotlin/com/kxaca/dartdatatoolkit/
 
 ## Build
 
-Requirements: JDK 17+, Gradle 8.8 (pinned via wrapper)
+Requirements: JDK 17+, Gradle 8.14.4 (pinned via wrapper)
 
 ```bash
 ./gradlew buildPlugin    # produces build/distributions/dart-data-toolkit-1.2.0.zip
