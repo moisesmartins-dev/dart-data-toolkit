@@ -5,6 +5,24 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto segue [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- ✨ Nova inspeção **"copyWith() is missing class fields"** (warning): avisa quando um `copyWith` não tem parâmetro para um ou mais campos da classe, com o quick fix **Generate copyWith** (Alt+Enter) que regenera o método no lugar. Requer o plugin Dart; sem ele, o restante do plugin funciona normalmente
+
+### Changed
+- 🔧 O cabeçalho do barrel file agora usa `//` em vez de `///`. Barrel files gerados por versões anteriores (`///`) continuam sendo reconhecidos e excluídos dos exports
+- 🔧 Gerar um barrel file não exibe mais o diálogo de sucesso; erros continuam sendo informados
+- 🔧 Compatível com builds 233 até 262 da plataforma IntelliJ (IntelliJ IDEA 2026.2 e Android Studio baseados nela)
+- 🔧 A geração de `copyWith` não inclui mais campos `static` nem privados (`_name`), que não podiam ser usados como parâmetros nomeados
+- 🔧 `gradlew` substituído pelo Gradle Wrapper padrão (`gradlew`, `gradlew.bat`, `gradle-wrapper.jar`) fixado no Gradle 8.14.4; o script anterior apontava para um caminho do Gradle 8.8 específico de uma máquina
+- 🔧 Ferramentas de build: IntelliJ Platform Gradle Plugin 2.10.5, Kotlin 2.4.21, compilado contra o IntelliJ IDEA 2026.2.3, Gradle 8.14.4 no CI
+
+### Fixed
+- 🐛 Campos `static final` / `static const` não são mais interpretados como propriedades de instância
+
+---
+
 ## [1.2.0] - 2026-06-24
 
 ### Added
