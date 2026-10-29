@@ -29,6 +29,15 @@ object CopyWithAnalysis {
     // Builds the edit that regenerates the copyWith of [className] in place, or null when it cannot be located.
     fun buildReplacement(text: String, className: String): CopyWithReplacement? {
         val dartClass = DartClassParser().parseAllClasses(text).firstOrNull { it.name == className } ?: return null
+
+        // findMethodBounds looks for the first "{" after the signature. With "copyWith(...) => ...;" that would be
+        // the body of the next method, so only a class-level copyWith with a block body is safe to replace.
+        val classBody = text.substring(dartClass.startOffset, dartClass.endOffset)
+        val signature = methodSignaturePattern("copyWith")?.find(classBody) ?: return null
+        if (braceDepthAt(classBody, signature.range.first) != 1) return null
+        val closeParen = closingParenIndex(classBody, signature.range.last)
+        if (closeParen == -1 || classBody.drop(closeParen + 1).trimStart().firstOrNull() != '{') return null
+
         val (start, end) = findMethodBounds(text, dartClass.startOffset, dartClass.endOffset, "copyWith") ?: return null
 
         val code = CopyWithGenerator().generate(dartClass)
@@ -67,17 +76,22 @@ object CopyWithAnalysis {
         return depth
     }
 
-    // [openParen] is the index of the "(" that starts the copyWith parameter list.
-    // Returns null when the list cannot be read, so callers stay silent instead of guessing.
-    internal fun extractParamNames(text: String, openParen: Int): Set<String>? {
+    // Index of the ")" matching the "(" at [openParen], or -1 when the parentheses are unbalanced.
+    private fun closingParenIndex(text: String, openParen: Int): Int {
         var depth = 0
-        var closeParen = -1
         for (i in openParen until text.length) {
             when (text[i]) {
                 '(' -> depth++
-                ')' -> { depth--; if (depth == 0) { closeParen = i; break } }
+                ')' -> { depth--; if (depth == 0) return i }
             }
         }
+        return -1
+    }
+
+    // [openParen] is the index of the "(" that starts the copyWith parameter list.
+    // Returns null when the list cannot be read, so callers stay silent instead of guessing.
+    internal fun extractParamNames(text: String, openParen: Int): Set<String>? {
+        val closeParen = closingParenIndex(text, openParen)
         if (closeParen == -1) return null
 
         val names = mutableSetOf<String>()

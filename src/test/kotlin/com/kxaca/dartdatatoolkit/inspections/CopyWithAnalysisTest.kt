@@ -297,6 +297,27 @@ class CopyWithAnalysisTest {
     }
 
     @Test
+    fun `quick fix never swallows the next method after an arrow-bodied copyWith`() {
+        val code = """
+            class User {
+              final String name;
+              final int age;
+
+              User copyWith({String? name}) => User(name: name ?? this.name, age: age);
+
+              @override
+              String toString() {
+                return 'User';
+              }
+            }
+        """.trimIndent()
+
+        // The warning is still reported, but the fix must not rewrite code it cannot delimit
+        assertEquals(listOf("age"), CopyWithAnalysis.findOutdatedCopyWith(code).single().missing)
+        assertNull(CopyWithAnalysis.buildReplacement(code, "User"))
+    }
+
+    @Test
     fun `no replacement for an unknown class`() {
         val code = "class User { final String name; User copyWith() { return User(); } }"
         assertNull(CopyWithAnalysis.buildReplacement(code, "Other"))
